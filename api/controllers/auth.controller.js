@@ -5,10 +5,14 @@ import { createError } from "../utils/createError.js";
 
 export const register = async (req, res, next) => {
   const username = await User.findOne({ username: req.body.username });
-  if (username) return next(createError(403, "The username already exists"));
+  if (username) {
+    return next(createError(403, "The username already exists"));
+  }
 
   const email = await User.findOne({ email: req.body.email });
-  if (email) return next(createError(403, "The email already exists"));
+  if (email) {
+    return next(createError(403, "The email already exists"));
+  }
 
   try {
     const hash = bcrypt.hashSync(req.body.password, 5);
@@ -18,17 +22,21 @@ export const register = async (req, res, next) => {
     });
     await newUser.save();
 
-    const { password, ...info } = newUser._doc;
-
+    const age = 1000 * 60 * 60 * 24 * 7;
     const token = jwt.sign(
       { id: newUser._id, isAdmin: newUser.isAdmin },
-      process.env.JWT
+      process.env.JWT,
+      { expiresIn: age }
     );
+
+    const { password, ...info } = newUser._doc;
+
     res
       .cookie("accessToken", token, {
         httpOnly: true,
         secure: true,
         sameSite: "none",
+        maxAge: age,
       })
       .status(200)
       .send(info);
@@ -40,23 +48,30 @@ export const register = async (req, res, next) => {
 export const login = async (req, res, next) => {
   try {
     const user = await User.findOne({ username: req.body.username });
-    if (!user) return next(createError(404, "User not found"));
+    if (!user) {
+      return next(createError(404, "User not found"));
+    }
 
     const isPassCorrect = bcrypt.compareSync(req.body.password, user.password);
-    if (!isPassCorrect)
+    if (!isPassCorrect) {
       return next(createError(403, "User or Pass is incorrect"));
+    }
+
+    const age = 1000 * 60 * 60 * 24 * 7;
+    const token = jwt.sign(
+      { id: user._id, isAdmin: user.isAdmin },
+      process.env.JWT,
+      { expiresIn: age }
+    );
 
     const { password, ...info } = user._doc;
 
-    const token = jwt.sign(
-      { id: user._id, isAdmin: user.isAdmin },
-      process.env.JWT
-    );
     res
       .cookie("accessToken", token, {
         httpOnly: true,
         secure: true,
         sameSite: "none",
+        maxAge: age,
       })
       .status(200)
       .send(info);
@@ -81,15 +96,21 @@ export const logout = async (req, res, next) => {
 
 export const googleAuth = async (req, res, next) => {
   try {
+    const age = 1000 * 60 * 60 * 24 * 7;
     const user = await User.findOne({ email: req.body.email });
+
     if (user) {
       const token = jwt.sign(
         { id: user._id, isAdmin: user.isAdmin },
-        process.env.JWT
+        process.env.JWT,
+        { expiresIn: age }
       );
       res
         .cookie("accessToken", token, {
           httpOnly: true,
+          secure: true,
+          sameSite: "none",
+          maxAge: age,
         })
         .status(200)
         .send(user._doc);
@@ -99,11 +120,15 @@ export const googleAuth = async (req, res, next) => {
 
       const token = jwt.sign(
         { id: newUser._id, isAdmin: newUser.isAdmin },
-        process.env.JWT
+        process.env.JWT,
+        { expiresIn: age }
       );
       res
         .cookie("accessToken", token, {
           httpOnly: true,
+          secure: true,
+          sameSite: "none",
+          maxAge: age,
         })
         .status(200)
         .send(newUser._doc);

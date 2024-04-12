@@ -7,20 +7,22 @@ import { toast } from "react-toastify";
 import { toastOptions } from "../../utils/toastOptions";
 import { CircularProgress } from "@mui/material";
 import { upload } from "../../utils/upload";
-import AdminUpdatePass from "../../components/admincomponents/AdminUpdatePass";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 const AdminUpdateUser = () => {
   const location = useLocation();
-  //   const data = location.state.data;
+  // const data = location.state.data;
   const { data } = location.state;
 
+  const [showPassword, setShowPassword] = useState(false);
   const [avatar, setAvatar] = useState(null);
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState({
     username: data.username,
     email: data.email,
-    img: data.img,
     isAdmin: data.isAdmin,
+    password: "",
   });
 
   const handleChange = (e) => {
@@ -49,8 +51,9 @@ const AdminUpdateUser = () => {
     e.preventDefault();
     setLoading(true);
 
-    const { username } = user;
+    const { username, password } = user;
     const userRegExp = /^[a-zA-Z0-9]{6,}$/;
+    const regExp = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}$/;
 
     if (!userRegExp.test(username)) {
       setLoading(false);
@@ -60,12 +63,30 @@ const AdminUpdateUser = () => {
       );
     }
 
+    if (password && !regExp.test(password)) {
+      setLoading(false);
+      return toast.error(
+        "Your password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number.",
+        toastOptions
+      );
+    }
+
     try {
-      const url = avatar ? await upload(avatar) : data.img;
-      await mutation.mutateAsync({
-        ...user,
-        img: url,
-      });
+      const requestBody = {
+        username: user.username,
+        email: user.email,
+        isAdmin: user.isAdmin,
+      };
+
+      if (user.password !== "") {
+        requestBody.password = user.password;
+      }
+
+      if (avatar) {
+        requestBody.img = await upload(avatar);
+      }
+
+      await mutation.mutateAsync(requestBody);
       navigate("/admin/users");
       setLoading(false);
       toast("User has been updated", toastOptions);
@@ -78,7 +99,7 @@ const AdminUpdateUser = () => {
   return (
     <div className="flex dark:bg-black/90 dark:text-white py-5">
       <Sidebar />
-      <div className="m-auto flex items-center lg:flex-row flex-col xl:gap-[200px] lg:gap-[100px] gap-10">
+      <div className="m-auto">
         <div className="bg-orange-300 rounded-lg p-5 flex flex-col">
           <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
             <h1 className="text-xl font-semibold text-center mb-5">Update</h1>
@@ -87,7 +108,7 @@ const AdminUpdateUser = () => {
                 Username
               </label>
               <input
-                className="pl-1 py-1 rounded-md text-gray-500"
+                className="pl-1 py-1 rounded-md dark:text-black"
                 type="text"
                 name="username"
                 id="username"
@@ -100,7 +121,7 @@ const AdminUpdateUser = () => {
                 Email
               </label>
               <input
-                className="pl-1 py-1 rounded-md text-gray-500"
+                className="pl-1 py-1 rounded-md dark:text-black"
                 type="email"
                 name="email"
                 id="email"
@@ -109,21 +130,38 @@ const AdminUpdateUser = () => {
               />
             </div>
             <div className="flex flex-col">
+              <label className="text-lg font-medium" htmlFor="password">
+                Password
+              </label>
+              <div className="bg-white rounded-md pr-1 flex items-center justify-between">
+                <input
+                  className="pl-1 py-1 rounded-md dark:text-black"
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  id="password"
+                  placeholder="********"
+                  onChange={handleChange}
+                />
+                <span
+                  className="cursor-pointer dark:text-black"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                </span>
+              </div>
+            </div>
+            <div className="flex flex-col">
               <label className="text-lg font-medium" htmlFor="file">
                 Profile Pic
-                {avatar ? (
-                  <img
-                    className="h-10 w-10 object-cover rounded-full active:scale-90 duration-100 transition-all cursor-pointer"
-                    src={URL.createObjectURL(avatar)}
-                    alt=""
-                  />
-                ) : (
-                  <img
-                    className="h-10 w-10 object-cover rounded-full active:scale-90 duration-100 transition-all cursor-pointer"
-                    src={user.img || "/img/noavatar.jpg"}
-                    alt=""
-                  />
-                )}
+                <img
+                  className="h-10 w-10 object-cover rounded-full active:scale-90 duration-100 transition-all cursor-pointer"
+                  src={
+                    avatar
+                      ? URL.createObjectURL(avatar)
+                      : data.img || "/img/noavatar.jpg"
+                  }
+                  alt=""
+                />
               </label>
               <input
                 className="hidden"
@@ -161,7 +199,6 @@ const AdminUpdateUser = () => {
             </button>
           </form>
         </div>
-        <AdminUpdatePass userId={data._id} />
       </div>
     </div>
   );

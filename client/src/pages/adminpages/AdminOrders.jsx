@@ -57,7 +57,7 @@ const AdminOrders = () => {
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
                   <TableHead>
                     <TableRow>
-                      <TableCell className="dark:text-white">
+                      <TableCell className="dark:text-white hidden md:block">
                         Order ID
                       </TableCell>
                       <TableCell className="dark:text-white">

@@ -44,7 +44,7 @@ const UpdateReview = ({ review, setOpen }) => {
       <form onSubmit={handleUpdate}>
         <div className="flex gap-2">
           <textarea
-            className="border rounded-md p-1 text-gray-500"
+            className="border rounded-md p-1 dark:text-black"
             name="desc"
             id=""
             cols="22"

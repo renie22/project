@@ -2,21 +2,22 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CircularProgress from "@mui/material/CircularProgress";
 import { newRequest } from "../utils/newRequest";
-import { loginFailure, loginStart, loginSuccess } from "../redux/userSlice";
 import { toastOptions } from "../utils/toastOptions";
 import { toast } from "react-toastify";
 import { upload } from "../utils/upload";
-import UpdatePass from "../components/UpdatePass";
+import { updateStart, updateSuccess, updateFailure } from "../redux/userSlice";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 const UpdateUser = () => {
   const { currentUser, loading } = useSelector((state) => state.user);
 
+  const [showPassword, setShowPassword] = useState(false);
   const [avatar, setAvatar] = useState(null);
-  const [open, setOpen] = useState(false);
   const [user, setUser] = useState({
     username: currentUser.username,
     email: currentUser.email,
-    img: currentUser.img,
+    password: "",
   });
 
   const dispatch = useDispatch();
@@ -27,36 +28,56 @@ const UpdateUser = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(loginStart());
+    dispatch(updateStart());
 
-    const { username } = user;
+    const { username, password } = user;
     const userRegExp = /^[a-zA-Z0-9]{6,}$/;
+    const regExp = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}$/;
 
     if (!userRegExp.test(username)) {
-      dispatch(loginFailure());
+      dispatch(updateFailure());
       return toast.error(
         "Your username must be at least 6 characters long.",
         toastOptions
       );
     }
 
+    if (password && !regExp.test(password)) {
+      dispatch(updateFailure());
+      return toast.error(
+        "Your password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number.",
+        toastOptions
+      );
+    }
+
     try {
-      const url = avatar ? await upload(avatar) : currentUser.img;
-      const res = await newRequest.put(`/users/${currentUser._id}`, {
-        ...user,
-        img: url,
-      });
-      dispatch(loginSuccess(res.data));
+      const requestBody = {
+        username: user.username,
+        email: user.email,
+      };
+
+      if (user.password !== "") {
+        requestBody.password = user.password;
+      }
+
+      if (avatar) {
+        requestBody.img = await upload(avatar);
+      }
+
+      const res = await newRequest.put(
+        `/users/${currentUser._id}`,
+        requestBody
+      );
+      dispatch(updateSuccess(res.data));
       toast("User has been updated", toastOptions);
     } catch (error) {
-      dispatch(loginFailure());
+      dispatch(updateFailure());
       toast.error(error.response.data, toastOptions);
     }
   };
 
   return (
     <>
-      {open && <UpdatePass setOpen={setOpen} />}
       <div className="h-[calc(100vh-245px)] w-full flex items-center justify-center dark:bg-black/80 dark:text-white">
         <div className="bg-orange-300 rounded-lg p-5 flex flex-col">
           <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
@@ -66,7 +87,7 @@ const UpdateUser = () => {
                 Username
               </label>
               <input
-                className="pl-1 py-1 rounded-md text-gray-500"
+                className="pl-1 py-1 rounded-md dark:text-black"
                 type="text"
                 name="username"
                 id="username"
@@ -79,7 +100,7 @@ const UpdateUser = () => {
                 Email
               </label>
               <input
-                className="pl-1 py-1 rounded-md text-gray-500"
+                className="pl-1 py-1 rounded-md dark:text-black"
                 type="email"
                 name="email"
                 id="email"
@@ -87,23 +108,39 @@ const UpdateUser = () => {
                 onChange={handleChange}
               />
             </div>
-
+            <div className="flex flex-col">
+              <label className="text-lg font-medium" htmlFor="password">
+                Password
+              </label>
+              <div className="bg-white rounded-md pr-1 flex items-center justify-between">
+                <input
+                  className="pl-1 py-1 rounded-md dark:text-black"
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  id="password"
+                  placeholder="********"
+                  onChange={handleChange}
+                />
+                <span
+                  className="cursor-pointer dark:text-black"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                </span>
+              </div>
+            </div>
             <div className="flex flex-col">
               <label className="text-lg font-medium" htmlFor="file">
                 Profile Pic
-                {avatar ? (
-                  <img
-                    className="h-10 w-10 object-cover rounded-full active:scale-90 duration-100 transition-all cursor-pointer"
-                    src={URL.createObjectURL(avatar)}
-                    alt=""
-                  />
-                ) : (
-                  <img
-                    className="h-10 w-10 object-cover rounded-full active:scale-90 duration-100 transition-all cursor-pointer"
-                    src={user.img || "/img/noavatar.jpg"}
-                    alt=""
-                  />
-                )}
+                <img
+                  className="h-10 w-10 object-cover rounded-full active:scale-90 duration-100 transition-all cursor-pointer"
+                  src={
+                    avatar
+                      ? URL.createObjectURL(avatar)
+                      : currentUser.img || "/img/noavatar.jpg"
+                  }
+                  alt=""
+                />
               </label>
               <input
                 className="hidden"
@@ -125,12 +162,6 @@ const UpdateUser = () => {
               )}
             </button>
           </form>
-          <span
-            className="mt-5 flex justify-start text-sm cursor-pointer text-red-500"
-            onClick={() => setOpen(!open)}
-          >
-            Change Password
-          </span>
         </div>
       </div>
     </>

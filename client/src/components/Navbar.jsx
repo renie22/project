@@ -62,6 +62,11 @@ const Navbar = () => {
     dispatch(setOpenCart({ cartState: true }));
   };
 
+  const handleSearch = (e) => {
+    e.preventDefault();
+    navigate(`/results?search=${q}`);
+  };
+
   return (
     <div
       className={
@@ -75,7 +80,10 @@ const Navbar = () => {
         <h1 className="hidden lg:flex text-lg font-semibold dark:text-white">
           Bubble Tea
         </h1>
-        <div className="border dark:border-gray-600 xl:w-[500px] lg:w-[350px] md:w-[250px] p-1 flex items-center justify-between rounded-2xl">
+        <form
+          className="border dark:border-gray-600 xl:w-[500px] lg:w-[350px] md:w-[250px] p-1 flex items-center justify-between rounded-2xl"
+          onSubmit={handleSearch}
+        >
           <input
             className={
               active
@@ -86,11 +94,10 @@ const Navbar = () => {
             placeholder="Search"
             onChange={(e) => setQ(e.target.value)}
           />
-          <SearchOutlinedIcon
-            className="dark:text-white cursor-pointer"
-            onClick={() => navigate(`/results?search=${q}`)}
-          />
-        </div>
+          <button type="submit">
+            <SearchOutlinedIcon />
+          </button>
+        </form>
         <div className="flex items-center gap-8">
           <button className="z-[60]" onClick={toggleTheme}>
             {darkMode ? <LightModeIcon /> : <DarkModeIcon />}

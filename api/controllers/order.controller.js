@@ -38,7 +38,7 @@ export const createPayment = async (req, res, next) => {
     });
 
     const newOrder = new Order({
-      userId: req.user.id,
+      userId: req.userId,
       carts,
       buyerName,
       buyerImg,
@@ -54,72 +54,76 @@ export const createPayment = async (req, res, next) => {
 };
 
 export const updateOrder = async (req, res, next) => {
-  if (req.isAdmin) {
-    try {
-      const updatedOrder = await Order.findByIdAndUpdate(
-        req.params.id,
-        {
-          $set: req.body,
-        },
-        { new: true }
-      );
-      if (!updatedOrder) return next(createError(404, "Order not found"));
-
-      res.status(200).send(updatedOrder);
-    } catch (error) {
-      next(error);
-    }
-  } else {
+  if (!req.isAdmin) {
     return next(createError(403, "Admin only"));
+  }
+
+  try {
+    const updatedOrder = await Order.findByIdAndUpdate(
+      req.params.id,
+      {
+        $set: req.body,
+      },
+      { new: true }
+    );
+    if (!updatedOrder) {
+      return next(createError(404, "Order not found"));
+    }
+
+    res.status(200).send(updatedOrder);
+  } catch (error) {
+    next(error);
   }
 };
 
 export const deleteOrder = async (req, res, next) => {
-  if (req.isAdmin) {
-    try {
-      const order = await Order.findByIdAndDelete(req.params.id);
-      if (!order) return next(createError(404, "Order not found"));
-
-      res.status(200).send("Order has been deleted.");
-    } catch (error) {
-      next(error);
-    }
-  } else {
+  if (!req.isAdmin) {
     return next(createError(403, "Admin only"));
+  }
+
+  try {
+    const order = await Order.findByIdAndDelete(req.params.id);
+    if (!order) {
+      return next(createError(404, "Order not found"));
+    }
+
+    res.status(200).send("Order has been deleted.");
+  } catch (error) {
+    next(error);
   }
 };
 
 export const getUserOrder = async (req, res, next) => {
-  if (req.params.userId === req.user.id) {
-    try {
-      const orders = await Order.find({ userId: req.params.userId }).sort({
-        createdAt: -1,
-      });
-
-      res.status(200).send(orders);
-    } catch (error) {
-      next(error);
-    }
-  } else {
+  if (req.params.userId !== req.userId) {
     return next(createError(403, "You can get only your order."));
+  }
+
+  try {
+    const orders = await Order.find({ userId: req.params.userId }).sort({
+      createdAt: -1,
+    });
+
+    res.status(200).send(orders);
+  } catch (error) {
+    next(error);
   }
 };
 
 export const getAllOrder = async (req, res, next) => {
-  if (req.isAdmin) {
-    const q = req.query;
-
-    const filters = {
-      ...(q.search && { buyerName: { $regex: q.search, $options: "i" } }),
-    };
-
-    try {
-      const orders = await Order.find(filters).sort({ createdAt: -1 });
-      res.status(200).send(orders);
-    } catch (error) {
-      next(error);
-    }
-  } else {
+  if (!req.isAdmin) {
     return next(createError(403, "Admin only"));
+  }
+
+  const q = req.query;
+
+  const filters = {
+    ...(q.search && { buyerName: { $regex: q.search, $options: "i" } }),
+  };
+
+  try {
+    const orders = await Order.find(filters).sort({ createdAt: -1 });
+    res.status(200).send(orders);
+  } catch (error) {
+    next(error);
   }
 };
