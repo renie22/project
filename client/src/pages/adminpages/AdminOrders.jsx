@@ -11,6 +11,7 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { format } from "timeago.js";
 import { CircularProgress } from "@mui/material";
+import { motion } from "framer-motion";
 
 const AdminOrders = () => {
   const [search, setSearch] = useState("");
@@ -31,7 +32,11 @@ const AdminOrders = () => {
     <div className="flex dark:bg-black/90 dark:text-white py-5">
       <Sidebar />
       <div className="px-5 flex w-[1400px] mx-auto">
-        <div className="flex flex-col gap-2 w-full">
+        <motion.div
+          initial={{ x: -200, opacity: 0 }}
+          animate={{ x: 0, opacity: 1, transition: { duration: 0.5 } }}
+          className="flex flex-col gap-2 w-full"
+        >
           <h1 className="text-2xl font-bold">Orders</h1>
           <input
             className="border-b border-gray-400 w-[200px] bg-transparent placeholder:text-gray-500 my-2"
@@ -120,7 +125,7 @@ const AdminOrders = () => {
               </TableContainer>
             </div>
           )}
-        </div>
+        </motion.div>
       </div>
     </div>
   );

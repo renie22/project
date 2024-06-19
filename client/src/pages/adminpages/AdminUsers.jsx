@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import DataTable from "../../components/admincomponents/DataTable";
 import Sidebar from "../../components/admincomponents/Sidebar";
 import AddNewUser from "../../components/admincomponents/AddNewUser";
+import { motion } from "framer-motion";
 
 const AdminUsers = () => {
   const [open, setOpen] = useState(false);
@@ -68,7 +69,11 @@ const AdminUsers = () => {
     <div className="flex dark:bg-black/90 dark:text-white py-5">
       <Sidebar />
       <div className="px-5 flex w-[1400px] mx-auto mb-5">
-        <div className="flex flex-col gap-2 w-full">
+        <motion.div
+          initial={{ x: -200, opacity: 0 }}
+          animate={{ x: 0, opacity: 1, transition: { duration: 0.5 } }}
+          className="flex flex-col gap-2 w-full"
+        >
           <h1 className="text-2xl font-bold">Users</h1>
           <DataTable columns={columns} slugs="users" slug="user" />
           {open && <AddNewUser setOpen={setOpen} />}
@@ -78,7 +83,7 @@ const AdminUsers = () => {
           >
             Add New User
           </button>
-        </div>
+        </motion.div>
       </div>
     </div>
   );

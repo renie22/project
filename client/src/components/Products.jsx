@@ -3,12 +3,13 @@ import Card from "./Card";
 import { newRequest } from "../utils/newRequest";
 import { useQuery } from "@tanstack/react-query";
 import { CircularProgress } from "@mui/material";
+import { motion, useInView } from "framer-motion";
 
 const Products = () => {
   const [sort, setSort] = useState("");
   const minRef = useRef();
   const maxRef = useRef();
-  const ref = useRef();
+  const productsRef = useRef(null);
 
   const { isLoading, error, data, refetch } = useQuery({
     queryKey: ["products"],
@@ -34,13 +35,42 @@ const Products = () => {
     refetch();
   };
 
+  const productsInView = useInView(productsRef, { margin: "-300px" });
+
+  const textVariants = {
+    initial: {
+      x: -300,
+      opacity: 0,
+    },
+    animate: {
+      x: 0,
+      opacity: 1,
+      transition: {
+        duration: 0.8,
+        staggerChildren: 0.2,
+      },
+    },
+  };
+
   return (
-    <div className="flex justify-center dark:bg-black/80 dark:text-white overflow-hidden">
-      <div className="w-[1400px] p-5" ref={ref}>
-        <h1 className="text-xl font-semibold">Products</h1>
+    <div ref={productsRef} className="dark:bg-black/80 dark:text-white pb-5">
+      <motion.div
+        variants={textVariants}
+        initial="initial"
+        animate={productsInView ? "animate" : {}}
+        className="layout flex flex-col justify-center"
+      >
+        <motion.h1 variants={textVariants} className="text-xl font-semibold">
+          Products
+        </motion.h1>
         <div>
-          <h3 className="text-lg font-medium py-2">Category</h3>
-          <div className="flex gap-3">
+          <motion.h3
+            variants={textVariants}
+            className="text-lg font-medium py-2"
+          >
+            Category
+          </motion.h3>
+          <motion.div variants={textVariants} className="flex gap-3">
             <button
               className="bg-orange-500 hover:bg-orange-600 text-white rounded-md active:scale-90 duration-100 transition-all w-[100px] dark:bg-orange-700 dark:hover:bg-orange-600"
               onClick={() => reSort("")}
@@ -71,11 +101,16 @@ const Products = () => {
             >
               Fruit Tea
             </button>
-          </div>
+          </motion.div>
         </div>
         <div>
-          <h3 className="text-lg font-medium py-2">Sort Price</h3>
-          <div className="flex gap-3">
+          <motion.h3
+            variants={textVariants}
+            className="text-lg font-medium py-2"
+          >
+            Sort Price
+          </motion.h3>
+          <motion.div variants={textVariants} className="flex gap-3">
             <input
               ref={minRef}
               className="pl-1 border  dark:bg-transparent dark:border-gray-600"
@@ -94,7 +129,7 @@ const Products = () => {
             >
               Apply
             </button>
-          </div>
+          </motion.div>
         </div>
         <h1 className="text-xl font-semibold text-center my-5">
           {sort === "" ? "All" : sort}
@@ -104,13 +139,25 @@ const Products = () => {
         ) : error ? (
           "Something went wrong"
         ) : (
-          <div className="md:grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2  gap-5 flex flex-col items-center">
+          <motion.div
+            initial={{ y: 100, opacity: 0 }}
+            animate={
+              productsInView
+                ? {
+                    y: 0,
+                    opacity: 1,
+                    transition: { delay: 0.8, duration: 0.8 },
+                  }
+                : {}
+            }
+            className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5"
+          >
             {data.map((product) => (
               <Card key={product._id} product={product} />
             ))}
-          </div>
+          </motion.div>
         )}
-      </div>
+      </motion.div>
     </div>
   );
 };

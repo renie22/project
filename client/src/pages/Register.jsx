@@ -9,6 +9,7 @@ import { loginFailure, loginStart, loginSuccess } from "../redux/userSlice";
 import CircularProgress from "@mui/material/CircularProgress";
 import { toast } from "react-toastify";
 import { toastOptions } from "../utils/toastOptions";
+import { motion } from "framer-motion";
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -80,8 +81,12 @@ const Register = () => {
   };
 
   return (
-    <div className="h-[calc(100vh-245px)] w-full flex items-center justify-center dark:bg-black/80 dark:text-white">
-      <div className="bg-orange-300 rounded-lg p-5 flex flex-col">
+    <div className="h-[calc(100vh-245px)] flex items-center justify-center dark:bg-black/80 dark:text-white">
+      <motion.div
+        initial={{ opacity: 0, x: -300 }}
+        animate={{ x: 0, opacity: 1, transition: { duration: 0.2 } }}
+        className="bg-orange-300 rounded-lg p-5 flex flex-col"
+      >
         <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
           <h1 className="text-xl font-semibold text-center mb-5">Register</h1>
           <div className="flex flex-col">
@@ -200,7 +205,7 @@ const Register = () => {
         <Link to="/login" className="text-sm text-red-500 underline mt-2">
           Go to Login
         </Link>
-      </div>
+      </motion.div>
     </div>
   );
 };

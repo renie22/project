@@ -8,6 +8,7 @@ import { upload } from "../utils/upload";
 import { updateStart, updateSuccess, updateFailure } from "../redux/userSlice";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import { motion } from "framer-motion";
 
 const UpdateUser = () => {
   const { currentUser, loading } = useSelector((state) => state.user);
@@ -79,7 +80,11 @@ const UpdateUser = () => {
   return (
     <>
       <div className="h-[calc(100vh-245px)] w-full flex items-center justify-center dark:bg-black/80 dark:text-white">
-        <div className="bg-orange-300 rounded-lg p-5 flex flex-col">
+        <motion.div
+          initial={{ opacity: 0, x: -300 }}
+          animate={{ x: 0, opacity: 1, transition: { duration: 0.2 } }}
+          className="bg-orange-300 rounded-lg p-5 flex flex-col"
+        >
           <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
             <h1 className="text-xl font-semibold text-center mb-5">Update</h1>
             <div className="flex flex-col">
@@ -162,7 +167,7 @@ const UpdateUser = () => {
               )}
             </button>
           </form>
-        </div>
+        </motion.div>
       </div>
     </>
   );

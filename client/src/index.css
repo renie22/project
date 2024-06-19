@@ -7,6 +7,10 @@
   font-family: "Roboto", sans-serif;
 }
 
+.layout {
+  @apply max-w-[640px] md:max-w-[768px] lg:max-w-[1024px] xl:max-w-[1366px] 2xl:max-w-[1536px] mx-auto px-5 xl:px-10;
+}
+
 input,
 textarea {
   outline: none;

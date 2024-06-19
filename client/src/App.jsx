@@ -24,6 +24,18 @@ import UpdateUser from "./pages/UpdateUser";
 import AdminUpdateUser from "./pages/adminpages/AdminUpdateUser";
 import AdminUpdateProduct from "./pages/adminpages/AdminUpdateProduct";
 
+const Layout = () => {
+  const { darkMode } = useSelector((state) => state.theme);
+
+  return (
+    <div className={`${darkMode && "dark"}`}>
+      <Navbar />
+      <Outlet />
+      <Footer />
+    </div>
+  );
+};
+
 function App() {
   const queryClient = new QueryClient();
   const currentUser = useSelector((state) => state.user.currentUser);
@@ -110,15 +122,3 @@ function App() {
 }
 
 export default App;
-
-const Layout = () => {
-  const { darkMode } = useSelector((state) => state.theme);
-
-  return (
-    <div className={`${darkMode && "dark"}`}>
-      <Navbar />
-      <Outlet />
-      <Footer />
-    </div>
-  );
-};

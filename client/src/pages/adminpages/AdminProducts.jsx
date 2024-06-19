@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Sidebar from "../../components/admincomponents/Sidebar";
 import AddNewProduct from "../../components/admincomponents/AddNewProduct";
 import DataTable from "../../components/admincomponents/DataTable";
+import { motion } from "framer-motion";
 
 const AdminProducts = () => {
   const [open, setOpen] = useState(false);
@@ -56,7 +57,11 @@ const AdminProducts = () => {
     <div className="flex dark:bg-black/90 dark:text-white py-5">
       <Sidebar />
       <div className="px-5 flex w-[1400px] mx-auto mb-5">
-        <div className="flex flex-col gap-2 w-full">
+        <motion.div
+          initial={{ x: -200, opacity: 0 }}
+          animate={{ x: 0, opacity: 1, transition: { duration: 0.5 } }}
+          className="flex flex-col gap-2 w-full"
+        >
           <h1 className="text-2xl font-bold">Products</h1>
           <DataTable columns={columns} slugs="products" slug="product" />
           {open && <AddNewProduct setOpen={setOpen} />}
@@ -66,7 +71,7 @@ const AdminProducts = () => {
           >
             Add New Product
           </button>
-        </div>
+        </motion.div>
       </div>
     </div>
   );

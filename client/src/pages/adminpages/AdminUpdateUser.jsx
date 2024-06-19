@@ -9,6 +9,7 @@ import { CircularProgress } from "@mui/material";
 import { upload } from "../../utils/upload";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import { motion } from "framer-motion";
 
 const AdminUpdateUser = () => {
   const location = useLocation();
@@ -100,7 +101,11 @@ const AdminUpdateUser = () => {
     <div className="flex dark:bg-black/90 dark:text-white py-5">
       <Sidebar />
       <div className="m-auto">
-        <div className="bg-orange-300 rounded-lg p-5 flex flex-col">
+        <motion.div
+          initial={{ opacity: 0, x: -300 }}
+          animate={{ x: 0, opacity: 1, transition: { duration: 0.2 } }}
+          className="bg-orange-300 rounded-lg p-5 flex flex-col"
+        >
           <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
             <h1 className="text-xl font-semibold text-center mb-5">Update</h1>
             <div className="flex flex-col">
@@ -198,7 +203,7 @@ const AdminUpdateUser = () => {
               )}
             </button>
           </form>
-        </div>
+        </motion.div>
       </div>
     </div>
   );

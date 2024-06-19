@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import TwitterIcon from "@mui/icons-material/Twitter";
@@ -7,18 +7,39 @@ import RoomIcon from "@mui/icons-material/Room";
 import PhoneIcon from "@mui/icons-material/Phone";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import { Link, useLocation } from "react-router-dom";
+import { motion, useInView } from "framer-motion";
 
 const Footer = () => {
   const { pathname } = useLocation();
+  const footerRef = useRef(null);
+  const footerInView = useInView(footerRef, { once: true });
+
+  const textVariants = {
+    initial: {
+      scale: 0.8,
+      opacity: 0,
+    },
+    animate: {
+      scale: 1,
+      opacity: 1,
+      transition: {
+        duration: 0.6,
+        staggerChildren: 0.2,
+      },
+    },
+  };
 
   return (
-    <>
-      <div className="flex justify-center dark:bg-black/90 dark:text-white">
-        <div className="w-[1400px] sm:h-[175px] h-full flex sm:flex-row flex-col justify-between sm:items-start items-center gap-5 md:p-5 p-2 ">
-          <div>
-            <h1 className="font-medium sm:mb-5 mb-2 sm:text-left text-center">
-              Bubble Tea Social Media
-            </h1>
+    <div ref={footerRef} className="h-[175px] dark:bg-black/90 dark:text-white">
+      <motion.div
+        variants={textVariants}
+        initial="initial"
+        animate={footerInView ? "animate" : {}}
+        className="layout h-full flex flex-col justify-center"
+      >
+        <div className="flex justify-between">
+          <motion.div variants={textVariants}>
+            <h1 className="font-medium mb-5">Bubble Tea Social Media</h1>
             <div className="flex gap-5">
               <div className="w-10 h-10 rounded-full text-white bg-[#3b5999] flex items-center justify-center">
                 <FacebookIcon />
@@ -33,8 +54,11 @@ const Footer = () => {
                 <PinterestIcon />
               </div>
             </div>
-          </div>
-          <div className="flex flex-col sm:items-start items-center">
+          </motion.div>
+          <motion.div
+            variants={textVariants}
+            className="hidden md:flex flex-col"
+          >
             <h1 className="font-medium sm:mb-5 mb-2">Useful Links</h1>
             <ul className="text-gray-400 font-light">
               {pathname !== "/" ? (
@@ -65,8 +89,8 @@ const Footer = () => {
                 </li>
               )}
             </ul>
-          </div>
-          <div className="flex flex-col sm:items-start items-center">
+          </motion.div>
+          <motion.div variants={textVariants} className="flex flex-col">
             <h3 className="mb-2 font-medium">Contact</h3>
             <div className="mb-1 flex items-center gap-2 text-gray-400 font-light">
               <RoomIcon /> 123 Street , Manila 456
@@ -78,10 +102,10 @@ const Footer = () => {
               <MailOutlineIcon /> contact@arfan
             </div>
             <img src="https://i.ibb.co/Qfvn4z6/payment.png" alt="" />
-          </div>
+          </motion.div>
         </div>
-      </div>
-    </>
+      </motion.div>
+    </div>
   );
 };
 

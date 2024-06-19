@@ -7,6 +7,7 @@ import { newRequest } from "../../utils/newRequest";
 import { toastOptions } from "../../utils/toastOptions";
 import { toast } from "react-toastify";
 import { upload } from "../../utils/upload";
+import { motion } from "framer-motion";
 
 const AdminUpdateProduct = () => {
   const location = useLocation();
@@ -72,7 +73,11 @@ const AdminUpdateProduct = () => {
     <div className="flex dark:bg-black/90 dark:text-white py-5">
       <Sidebar />
       <div className="m-auto">
-        <div className="bg-orange-300 rounded-lg p-5 flex flex-col md:pr-5 pr-8">
+        <motion.div
+          initial={{ opacity: 0, x: -300 }}
+          animate={{ x: 0, opacity: 1, transition: { duration: 0.2 } }}
+          className="bg-orange-300 rounded-lg p-5 flex flex-col md:pr-5 pr-8"
+        >
           <form
             className="flex flex-col gap-3 lg:w-[600px] md:w-[400px] w-[380px]"
             onSubmit={handleSubmit}
@@ -232,7 +237,7 @@ const AdminUpdateProduct = () => {
               )}
             </button>
           </form>
-        </div>
+        </motion.div>
       </div>
     </div>
   );

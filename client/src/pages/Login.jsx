@@ -10,6 +10,7 @@ import { toastOptions } from "../utils/toastOptions";
 import CircularProgress from "@mui/material/CircularProgress";
 import { signInWithPopup } from "firebase/auth";
 import { auth, provider } from "../firebase";
+import { motion } from "framer-motion";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -67,7 +68,11 @@ const Login = () => {
 
   return (
     <div className="h-[calc(100vh-245px)] w-full flex items-center justify-center dark:bg-black/80 dark:text-white">
-      <div className="bg-orange-300 rounded-lg p-5 flex flex-col">
+      <motion.div
+        initial={{ opacity: 0, x: -300 }}
+        animate={{ x: 0, opacity: 1, transition: { duration: 0.2 } }}
+        className="bg-orange-300 rounded-lg p-5 flex flex-col"
+      >
         <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
           <h1 className="text-xl font-semibold text-center mb-5">Login</h1>
           <div className="flex flex-col">
@@ -133,7 +138,7 @@ const Login = () => {
         <Link to="/register" className="text-sm text-red-500 underline mt-2">
           Go to Register
         </Link>
-      </div>
+      </motion.div>
     </div>
   );
 };
