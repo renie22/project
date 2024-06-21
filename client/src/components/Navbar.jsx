@@ -199,7 +199,7 @@ const Navbar = () => {
                   <Link to="/admin">
                     <motion.li
                       variants={listItemVariants}
-                      className="border w-full h-14 flex justify-center items-center rounded-md hover:bg-green-300 hover:text-black"
+                      className="border w-full h-14 flex justify-center items-center rounded-md hover:bg-green-300 dark:hover:bg-blue-300 hover:text-black"
                     >
                       Dashboard
                     </motion.li>
@@ -209,7 +209,7 @@ const Navbar = () => {
                   <Link to="/">
                     <motion.li
                       variants={listItemVariants}
-                      className="border w-full h-14 flex justify-center items-center rounded-md hover:bg-green-300 hover:text-black"
+                      className="border w-full h-14 flex justify-center items-center rounded-md hover:bg-green-300 dark:hover:bg-blue-300 hover:text-black"
                     >
                       Home
                     </motion.li>
@@ -217,7 +217,7 @@ const Navbar = () => {
                 ) : (
                   <motion.li
                     variants={listItemVariants}
-                    className="border w-full h-14 flex justify-center items-center rounded-md hover:bg-green-300 hover:text-black"
+                    className="border w-full h-14 flex justify-center items-center rounded-md hover:bg-green-300 dark:hover:bg-blue-300 hover:text-black"
                   >
                     <a href="#" className="w-full">
                       Home
@@ -228,7 +228,7 @@ const Navbar = () => {
                   <Link to="/">
                     <motion.li
                       variants={listItemVariants}
-                      className="border w-full h-14 flex justify-center items-center rounded-md hover:bg-green-300 hover:text-black"
+                      className="border w-full h-14 flex justify-center items-center rounded-md hover:bg-green-300 dark:hover:bg-blue-300 hover:text-black"
                     >
                       About
                     </motion.li>
@@ -236,7 +236,7 @@ const Navbar = () => {
                 ) : (
                   <motion.li
                     variants={listItemVariants}
-                    className="border w-full h-14 flex justify-center items-center rounded-md hover:bg-green-300 hover:text-black"
+                    className="border w-full h-14 flex justify-center items-center rounded-md hover:bg-green-300 dark:hover:bg-blue-300 hover:text-black"
                   >
                     <a href="#about" className="w-full">
                       About
@@ -247,7 +247,7 @@ const Navbar = () => {
                   <Link to="/">
                     <motion.li
                       variants={listItemVariants}
-                      className="border w-full h-14 flex justify-center items-center rounded-md hover:bg-green-300 hover:text-black"
+                      className="border w-full h-14 flex justify-center items-center rounded-md hover:bg-green-300 dark:hover:bg-blue-300 hover:text-black"
                     >
                       Menu
                     </motion.li>
@@ -255,7 +255,7 @@ const Navbar = () => {
                 ) : (
                   <motion.li
                     variants={listItemVariants}
-                    className="border w-full h-14 flex justify-center items-center rounded-md hover:bg-green-300 hover:text-black"
+                    className="border w-full h-14 flex justify-center items-center rounded-md hover:bg-green-300 dark:hover:bg-blue-300 hover:text-black"
                   >
                     <a href="#menu" className="w-full">
                       Menu
