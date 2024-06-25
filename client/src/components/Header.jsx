@@ -30,14 +30,11 @@ const Header = () => {
         variants={textVariants}
         animate={headerInView ? "animate" : {}}
         initial="initial"
-        className="layout h-full flex flex-col gap-10 justify-center items-center md:flex-row md:justify-between md:gap-20"
+        className="layout h-full flex flex-col justify-center items-center gap-10 md:flex-row md:justify-between md:gap-20"
       >
-        <motion.div
-          variants={textVariants}
-          className="md:order-2 md:w-1/2 flex items-center justify-center"
-        >
+        <motion.div variants={textVariants} className="md:order-2 md:w-1/2">
           <img
-            className="h-[300px] w-[300px] md:w-[350px] md:h-[350px] lg:w-[400px] lg:h-[400px] xl:w-[450px] xl:h-[450px] object-cover hover:-rotate-[25deg] duration-200"
+            className="h-[300px] w-[300px] md:w-[350px] md:h-[350px] lg:w-[400px] lg:h-[400px] xl:w-[450px] xl:h-[450px] object-cover hover:-rotate-[25deg] duration-200 border border-red-500"
             src="/img/milktea.png"
             alt=""
           />

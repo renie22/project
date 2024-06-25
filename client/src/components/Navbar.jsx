@@ -46,7 +46,9 @@ const Navbar = () => {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    navigate(`/results?search=${q}`);
+    if (q) {
+      navigate(`/results?search=${q}`);
+    }
   };
 
   const textVariants = {
