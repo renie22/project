@@ -34,7 +34,7 @@ const Header = () => {
       >
         <motion.div variants={textVariants} className="md:order-2 md:w-1/2">
           <img
-            className="h-[300px] w-[300px] md:w-[350px] md:h-[350px] lg:w-[400px] lg:h-[400px] xl:w-[450px] xl:h-[450px] object-cover hover:-rotate-[25deg] duration-200 border border-red-500"
+            className="h-[300px] w-[300px] md:w-[350px] md:h-[350px] lg:w-[400px] lg:h-[400px] xl:w-[450px] xl:h-[450px] object-cover hover:-rotate-[25deg] duration-200"
             src="/img/milktea.png"
             alt=""
           />
