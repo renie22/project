@@ -113,11 +113,31 @@ export const getReviews = async (req, res, next) => {
 
 export const likeReview = async (req, res, next) => {
   try {
-    await Review.findByIdAndUpdate(req.params.id, {
-      $addToSet: { likes: req.userId },
-    });
+    const review = await Review.findByIdAndUpdate(
+      req.params.id,
+      { $addToSet: { likes: req.userId }, $inc: { likesCount: 1 } },
+      { new: true }
+    );
+
+    if (!review) return next(createError(404, "Review not found"));
 
     res.status(200).send("The review has been liked");
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const unlikeReview = async (req, res, next) => {
+  try {
+    const review = await Review.findByIdAndUpdate(
+      req.params.id,
+      { $pull: { likes: req.userId }, $inc: { likesCount: -1 } },
+      { new: true }
+    );
+
+    if (!review) return next(createError(404, "Review not found"));
+
+    res.status(200).send("Review has been unliked");
   } catch (error) {
     next(error);
   }

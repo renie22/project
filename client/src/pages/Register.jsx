@@ -66,7 +66,7 @@ const Register = () => {
     }
 
     try {
-      const url = await upload(avatar);
+      const url = avatar ? await upload(avatar) : null;
       const res = await newRequest.post("/auth/register", {
         ...user,
         img: url,
@@ -168,19 +168,15 @@ const Register = () => {
           <div className="flex flex-col">
             <label className="text-lg font-medium" htmlFor="file">
               Profile Pic
-              {avatar ? (
-                <img
-                  className="h-10 w-10 object-cover rounded-full active:scale-90 duration-100 transition-all cursor-pointer"
-                  src={URL.createObjectURL(avatar)}
-                  alt=""
-                />
-              ) : (
-                <img
-                  className="h-10 w-10 object-cover rounded-full active:scale-90 duration-100 transition-all cursor-pointer"
-                  src="/img/login-animation.gif"
-                  alt=""
-                />
-              )}
+              <img
+                className="h-10 w-10 object-cover rounded-full active:scale-90 duration-100 transition-all cursor-pointer"
+                src={
+                  avatar
+                    ? URL.createObjectURL(avatar)
+                    : "/img/login-animation.gif"
+                }
+                alt=""
+              />
             </label>
             <input
               className="hidden"

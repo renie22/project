@@ -16,9 +16,10 @@ const UpdateUser = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [avatar, setAvatar] = useState(null);
   const [user, setUser] = useState({
-    username: currentUser.username,
-    email: currentUser.email,
+    username: currentUser?.username || "",
+    email: currentUser?.email || "",
     password: "",
+    img: currentUser?.img || "",
   });
 
   const dispatch = useDispatch();
@@ -52,17 +53,15 @@ const UpdateUser = () => {
     }
 
     try {
+      const url = avatar ? await upload(avatar) : user.img;
       const requestBody = {
         username: user.username,
         email: user.email,
+        img: url,
       };
 
       if (user.password !== "") {
         requestBody.password = user.password;
-      }
-
-      if (avatar) {
-        requestBody.img = await upload(avatar);
       }
 
       const res = await newRequest.put(
@@ -71,6 +70,11 @@ const UpdateUser = () => {
       );
       dispatch(updateSuccess(res.data));
       toast("User has been updated", toastOptions);
+
+      setUser((prevUser) => ({
+        ...prevUser,
+        password: "",
+      }));
     } catch (error) {
       dispatch(updateFailure());
       toast.error(error.response.data, toastOptions);
@@ -124,6 +128,7 @@ const UpdateUser = () => {
                   name="password"
                   id="password"
                   placeholder="********"
+                  value={user.password}
                   onChange={handleChange}
                 />
                 <span

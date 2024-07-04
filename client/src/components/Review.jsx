@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import StarIcon from "@mui/icons-material/Star";
-import ThumbUpIcon from "@mui/icons-material/ThumbUp";
+import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
+import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { newRequest } from "../utils/newRequest";
 import { format } from "timeago.js";
@@ -57,6 +58,39 @@ const Review = ({ review, productId }) => {
     }
   };
 
+  // like and unlike
+  const likeMutation = useMutation({
+    mutationFn: (liked) => {
+      return newRequest.put(`/reviews/like/${review._id}`, liked);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["reviews"]);
+    },
+  });
+
+  const unlikeMutation = useMutation({
+    mutationFn: (liked) => {
+      return newRequest.put(`/reviews/unlike/${review._id}`, liked);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["reviews"]);
+    },
+  });
+
+  const handleLike = async () => {
+    try {
+      if (review.likes.includes(currentUser?._id)) {
+        const res = await unlikeMutation.mutateAsync();
+        toast(res.data, toastOptions);
+      } else {
+        const res = await likeMutation.mutateAsync();
+        toast(res.data, toastOptions);
+      }
+    } catch (error) {
+      toast.error(error.response.data, toastOptions);
+    }
+  };
+
   return (
     <>
       {isLoading ? (
@@ -90,11 +124,16 @@ const Review = ({ review, productId }) => {
             ) : (
               <p className="text-sm my-2 text-justify">{review.desc}</p>
             )}
-
             <div className="text-sm text-gray-400 flex gap-3">
               <div className="flex items-center gap-1">
-                <ThumbUpIcon fontSize="inherit" />
-                <span>Helpful?</span>
+                <button onClick={handleLike}>
+                  {review.likes.includes(currentUser?._id) ? (
+                    <ThumbUpAltIcon />
+                  ) : (
+                    <ThumbUpOffAltIcon />
+                  )}
+                </button>
+                {review.likesCount > 0 && <span>{review.likesCount}</span>}
               </div>
               {open ? (
                 <button onClick={handleCloseUpdate}>Cancel</button>

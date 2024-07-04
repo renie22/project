@@ -20,10 +20,11 @@ const AdminUpdateUser = () => {
   const [avatar, setAvatar] = useState(null);
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState({
-    username: data.username,
-    email: data.email,
-    isAdmin: data.isAdmin,
+    username: data?.username || "",
+    email: data?.email || "",
+    isAdmin: data?.isAdmin || false,
     password: "",
+    img: data?.img || "",
   });
 
   const handleChange = (e) => {
@@ -73,18 +74,16 @@ const AdminUpdateUser = () => {
     }
 
     try {
+      const url = avatar ? await upload(avatar) : user.img;
       const requestBody = {
         username: user.username,
         email: user.email,
         isAdmin: user.isAdmin,
+        img: url,
       };
 
       if (user.password !== "") {
         requestBody.password = user.password;
-      }
-
-      if (avatar) {
-        requestBody.img = await upload(avatar);
       }
 
       await mutation.mutateAsync(requestBody);

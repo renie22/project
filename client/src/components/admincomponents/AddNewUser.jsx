@@ -78,7 +78,7 @@ const AddNewUser = ({ setOpen }) => {
     }
 
     try {
-      const url = await upload(avatar);
+      const url = avatar ? await upload(avatar) : null;
       const res = await mutation.mutateAsync({
         ...user,
         img: url,

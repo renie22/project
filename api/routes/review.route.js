@@ -5,6 +5,7 @@ import {
   deleteReview,
   getReviews,
   likeReview,
+  unlikeReview,
   updateReview,
 } from "../controllers/review.controller.js";
 
@@ -14,6 +15,7 @@ router.post("/:productId", verifyToken, createReview);
 router.put("/:id", verifyToken, updateReview);
 router.delete("/:id", verifyToken, deleteReview);
 router.get("/:productId", getReviews);
-router.put("/liked/:id", verifyToken, likeReview);
+router.put("/like/:id", verifyToken, likeReview);
+router.put("/unlike/:id", verifyToken, unlikeReview);
 
 export default router;

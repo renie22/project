@@ -75,6 +75,7 @@ export const getProduct = async (req, res, next) => {
 
 export const getAllProduct = async (req, res, next) => {
   const q = req.query;
+  const excludeId = q.excludeId;
 
   const filters = {
     ...(q.category && { category: q.category }),
@@ -86,6 +87,7 @@ export const getAllProduct = async (req, res, next) => {
         ...(q.max && { $lte: q.max }),
       },
     }),
+    _id: { $ne: excludeId },
   };
 
   try {

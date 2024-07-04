@@ -32,6 +32,7 @@ const Layout = () => {
       <Navbar />
       <Outlet />
       <Footer />
+      <ToastContainer />
     </div>
   );
 };
@@ -116,7 +117,6 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />
-      <ToastContainer />
     </QueryClientProvider>
   );
 }

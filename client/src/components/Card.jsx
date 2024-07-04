@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { toastOptions } from "../utils/toastOptions";
 
-const Card = ({ product, isLatest }) => {
+const Card = ({ product, isLatest, relatedProduct }) => {
   const dispatch = useDispatch();
 
   let quantity = 1;
@@ -24,6 +24,8 @@ const Card = ({ product, isLatest }) => {
       className={
         isLatest
           ? "border dark:border-gray-700 h-[500px] w-[350px] rounded-lg p-5 dark:bg-black/80 dark:text-white"
+          : relatedProduct
+          ? "border dark:border-gray-700 h-[400px] w-[250px] md:h-[390px] md:w-[250px] rounded-lg p-5 dark:bg-black/80 dark:text-white"
           : "border dark:border-gray-700 h-[400px] w-[250px] md:h-[455px] md:w-[300px] rounded-lg p-5 dark:bg-black/80 dark:text-white"
       }
     >
@@ -36,10 +38,30 @@ const Card = ({ product, isLatest }) => {
           />
         </Link>
       </div>
-      <div className="h-1/2 flex flex-col gap-3">
+      <div
+        className={
+          relatedProduct
+            ? "h-1/2 flex flex-col gap-2"
+            : "h-1/2 flex flex-col gap-3"
+        }
+      >
         <div>
-          <h1 className="text-base md:text-lg font-medium">{product.title}</h1>
-          <h1 className="text-sm md:text-base text-gray-400">
+          <h1
+            className={
+              relatedProduct
+                ? "font-medium"
+                : "text-base md:text-lg font-medium"
+            }
+          >
+            {product.title}
+          </h1>
+          <h1
+            className={
+              relatedProduct
+                ? "text-sm text-gray-400"
+                : "text-sm md:text-base text-gray-400"
+            }
+          >
             {product.category}
           </h1>
           <div className="flex items-center gap-1 text-yellow-500">
@@ -52,15 +74,31 @@ const Card = ({ product, isLatest }) => {
           </div>
         </div>
         <div className="flex gap-2">
-          <h1 className="text-gray-400 line-through text-base md:text-lg font-medium">
+          <h1
+            className={
+              relatedProduct
+                ? "text-gray-400 line-through font-medium"
+                : "text-gray-400 line-through text-base md:text-lg font-medium"
+            }
+          >
             ${product.oldPrice}
           </h1>
-          <h1 className="text-base md:text-lg font-medium">${product.price}</h1>
+          <h1
+            className={
+              relatedProduct
+                ? "font-medium"
+                : "text-base md:text-lg font-medium"
+            }
+          >
+            ${product.price}
+          </h1>
         </div>
         <button
           className={
             isLatest
               ? "bg-orange-500 hover:bg-orange-600 text-lg font-medium text-white rounded-md p-1 active:scale-90 duration-100 transition-all mt-3"
+              : relatedProduct
+              ? "bg-orange-500 hover:bg-orange-600 text-lg font-medium text-white rounded-md p-[2px] active:scale-90 duration-100 transition-all"
               : "bg-orange-500 hover:bg-orange-600 text-sm md:text-lg font-medium text-white rounded-md p-1 active:scale-90 duration-100 transition-all"
           }
           onClick={() => {
@@ -80,7 +118,11 @@ const Card = ({ product, isLatest }) => {
           Add To Cart
         </button>
         <button
-          className="bg-blue-500 hover:bg-blue-600 text-sm md:text-lg font-medium text-white rounded-md p-1 active:scale-90 duration-100 transition-all "
+          className={
+            relatedProduct
+              ? "bg-blue-500 hover:bg-blue-600 text-sm md:text-lg font-medium text-white rounded-md p-[2px] active:scale-90 duration-100 transition-all"
+              : "bg-blue-500 hover:bg-blue-600 text-sm md:text-lg font-medium text-white rounded-md p-1 active:scale-90 duration-100 transition-all"
+          }
           onClick={() => {
             dispatch(
               addToCart({

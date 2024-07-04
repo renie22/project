@@ -112,7 +112,6 @@ const AdminUpdateProduct = () => {
                     <option value="Milk Tea">Milk Tea</option>
                     <option value="Bubble Tea">Bubble Tea</option>
                     <option value="Fruit Tea">Fruit Tea</option>
-                    <option value="Apple Tea">Apple Tea</option>
                   </select>
                 </div>
                 <div className="flex flex-col">

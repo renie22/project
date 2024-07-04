@@ -10,6 +10,7 @@ import { toastOptions } from "../utils/toastOptions";
 import Reviews from "../components/Reviews";
 import { CircularProgress } from "@mui/material";
 import { motion } from "framer-motion";
+import RelatedProduct from "../components/RelatedProduct";
 
 const Product = () => {
   const [selectedImg, setSelectedImg] = useState(0);
@@ -78,24 +79,24 @@ const Product = () => {
               </div>
               <div className="h-1/5 flex items-center gap-5 md:flex-col">
                 <div
-                  className={`h-[60px] w-[60px] lg:h-[90px] lg:w-[90px] border rounded-md dark:border-gray-700 ${
+                  className={`min-h-[80px] w-[60px] lg:h-[90px] lg:w-[90px] border rounded-md dark:border-gray-700 ${
                     selectedImg === 0 ? "bg-gray-200 dark:bg-gray-700" : ""
                   }`}
                 >
                   <img
-                    className="h-full w-full object-cover cursor-pointer"
+                    className="h-full w-full object-contain cursor-pointer"
                     src={data.images[0]}
                     alt=""
                     onClick={() => setSelectedImg(0)}
                   />
                 </div>
                 <div
-                  className={`h-[60px] w-[60px] lg:h-[90px] lg:w-[90px] border rounded-md dark:border-gray-700 ${
+                  className={`min-h-[80px] w-[60px] lg:h-[90px] lg:w-[90px] border rounded-md dark:border-gray-700 ${
                     selectedImg === 1 ? "bg-gray-200 dark:bg-gray-700" : ""
                   }`}
                 >
                   <img
-                    className="h-full w-full object-cover cursor-pointer"
+                    className="h-full w-full object-contain cursor-pointer"
                     src={data.images[1]}
                     alt=""
                     onClick={() => setSelectedImg(1)}
@@ -203,6 +204,7 @@ const Product = () => {
               </div>
             </motion.div>
           </div>
+          <RelatedProduct category={data.category} excludeId={id} />
           <hr className="mt-5 mb-14 dark:border-gray-700" />
           <Reviews productId={id} />
         </motion.div>

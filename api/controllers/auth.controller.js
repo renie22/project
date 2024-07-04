@@ -23,13 +23,13 @@ export const register = async (req, res, next) => {
     await newUser.save();
 
     const age = 1000 * 60 * 60 * 24 * 7;
+    const { password, ...info } = newUser._doc;
+
     const token = jwt.sign(
       { id: newUser._id, isAdmin: newUser.isAdmin },
       process.env.JWT,
       { expiresIn: age }
     );
-
-    const { password, ...info } = newUser._doc;
 
     res
       .cookie("accessToken", token, {
@@ -58,13 +58,13 @@ export const login = async (req, res, next) => {
     }
 
     const age = 1000 * 60 * 60 * 24 * 7;
+    const { password, ...info } = user._doc;
+
     const token = jwt.sign(
       { id: user._id, isAdmin: user.isAdmin },
       process.env.JWT,
       { expiresIn: age }
     );
-
-    const { password, ...info } = user._doc;
 
     res
       .cookie("accessToken", token, {
@@ -84,8 +84,8 @@ export const logout = async (req, res, next) => {
   try {
     res
       .clearCookie("accessToken", {
-        sameSite: "none",
         secure: true,
+        sameSite: "none",
       })
       .status(200)
       .send("User has been logged out");

@@ -24,6 +24,10 @@ const reviewSchema = new Schema(
       type: Array,
       required: false,
     },
+    likesCount: {
+      type: Number,
+      default: 0,
+    },
   },
   { timestamps: true }
 );

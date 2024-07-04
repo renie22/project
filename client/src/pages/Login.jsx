@@ -30,11 +30,11 @@ const Login = () => {
       const res = await newRequest.post("/auth/login", { username, password });
       dispatch(loginSuccess(res.data));
       if (res.data?.isAdmin) {
-        navigate("/admin");
         toast(`Welcome Admin ${res.data.username}!`, toastOptions);
+        navigate("/admin");
       } else {
-        navigate("/");
         toast(`Welcome ${res.data.username}!`, toastOptions);
+        navigate("/");
       }
     } catch (error) {
       dispatch(loginFailure());

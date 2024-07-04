@@ -91,12 +91,6 @@ const Products = () => {
             </button>
             <button
               className="bg-orange-500 hover:bg-orange-600 text-white rounded-md active:scale-90 duration-100 transition-all w-[100px] dark:bg-orange-700 dark:hover:bg-orange-600"
-              onClick={() => reSort("Apple Tea")}
-            >
-              Apple Tea
-            </button>
-            <button
-              className="bg-orange-500 hover:bg-orange-600 text-white rounded-md active:scale-90 duration-100 transition-all w-[100px] dark:bg-orange-700 dark:hover:bg-orange-600"
               onClick={() => reSort("Fruit Tea")}
             >
               Fruit Tea

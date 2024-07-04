@@ -18,9 +18,9 @@ const UserMenu = () => {
     try {
       const res = await newRequest.post("/auth/logout");
       dispatch(logout());
-      navigate("/");
       toast(res.data, toastOptions);
       setOpen(false);
+      navigate("/");
     } catch (error) {
       console.log(error);
     }
