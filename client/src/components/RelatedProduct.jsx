@@ -14,8 +14,6 @@ const RelatedProduct = ({ category, excludeId }) => {
         }),
   });
 
-  console.log(data);
-
   return (
     <div className="mt-10">
       <h1 className="text-xl font-semibold mb-5">Related Product</h1>
