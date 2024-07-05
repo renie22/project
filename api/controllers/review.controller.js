@@ -121,7 +121,7 @@ export const likeReview = async (req, res, next) => {
 
     if (!review) return next(createError(404, "Review not found"));
 
-    res.status(200).send("The review has been liked");
+    res.status(200).send("Review has been liked");
   } catch (error) {
     next(error);
   }
